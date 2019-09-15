@@ -19,11 +19,16 @@ class User extends Model {
 
     this.addHook('beforeSave', async user => {
       if (user.password) {
+        // eslint-disable-next-line no-param-reassign
         user.password_hash = await bycrypt.hash(user.password, 8);
       }
     });
 
     return this;
+  }
+
+  checkPassword(password) {
+    return bycrypt.compare(password, this.password_hash);
   }
 }
 export default User;
